@@ -56,7 +56,7 @@ public class UnattendedMineDecisioner implements Decision<AdvancedMurderBot.Game
 
         if(targetMine != null) {
 
-        	// LAYLA lowered how close the enemy can be (it needs to be further away now) Changed 2 to 3
+        	// LAYLA Looks for enemies within 2 tiles away
         	List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 3);
 
         	  boolean myHealthIsGreater = false;

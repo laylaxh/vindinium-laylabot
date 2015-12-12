@@ -50,12 +50,12 @@ public class EnRouteLootingDecisioner implements Decision<AdvancedMurderBot.Game
 
 				// Is it safe to take?
 				
-				// LAYLA looks for enemies within 2 tiles away
+				// LAYLA Looks for enemies within 2 tiles away
 	        	List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 2);
 
 	        	  boolean myHealthIsGreater = false;
 	              
-	              // check if my health is greater than both enemies by at least 40
+	              // Check if my health is greater than both enemies by at least 40
 	              for (GameState.Hero enemy : enemies) {
 	                if ((context.getGameState().getMe().getLife() + 40) < enemy.getLife()) {
 	                  myHealthIsGreater = false;
@@ -79,62 +79,3 @@ public class EnRouteLootingDecisioner implements Decision<AdvancedMurderBot.Game
 		return noGoodMineDecisioner.makeDecision(context);
 	}
 }
-
-//public class EnRouteLootingDecisioner implements Decision<AdvancedMurderBot.GameContext, BotMove> {
-//
-//    private final static Logger logger = LogManager.getLogger(EnRouteLootingDecisioner.class);
-//
-//    private final Decision<AdvancedMurderBot.GameContext, BotMove> noGoodMineDecisioner;
-//    private final Decision<AdvancedMurderBot.GameContext, BotMove> anotherMineDecisioner;
-//
-//    
-//    public EnRouteLootingDecisioner(Decision<AdvancedMurderBot.GameContext, BotMove> noGoodMineDecisioner,
-//    								Decision<AdvancedMurderBot.GameContext, BotMove> anotherMineDecisioner) {
-//        this.noGoodMineDecisioner = noGoodMineDecisioner;
-//        this.anotherMineDecisioner = anotherMineDecisioner;
-//    }
-//
-//	@Override
-//    public BotMove makeDecision(AdvancedMurderBot.GameContext context) {
-//        GameState.Position myPosition = context.getGameState().getMe().getPos();
-//        Map<GameState.Position, Vertex> boardGraph = context.getGameState().getBoardGraph();
-//        
-//        // Are we next to a mine that isn't ours?
-//        for(Vertex currentVertex : boardGraph.get(myPosition).getAdjacentVertices()) {
-//            Mine mine = context.getGameState().getMines().get(currentVertex.getPosition());
-//            if(mine != null && (mine.getOwner() == null
-//                    || mine.getOwner().getId() != context.getGameState().getMe().getId())) {
-//
-//                // Is it safe to take?
-//            	
-//            	// LAYLA: Take enemies health into consideration
-//            	List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 1);
-//                
-//                boolean myHealthIsGreater = false;
-//                
-//                // check if my health is greater than both enemies by at least 20
-//                for (GameState.Hero enemy : enemies) {
-//                  if ((context.getGameState().getMe().getLife() + 20) < enemy.getLife()) {
-//                    myHealthIsGreater = false;
-//                    break;
-//                  } else {
-//                    myHealthIsGreater = true;
-//                  }
-//                }                
-//            	
-//            	 
-//                if(enemies.size() < 2 && myHealthIsGreater) {
-//                	 logger.info("Taking a mine that we happen to already be walking by.");
-//                     return BotUtils.directionTowards(myPosition, mine.getPosition());
-//                 }
-//                }
-//                logger.info("Mine found, but another hero is too close.");
-//                return anotherMineDecisioner.makeDecision(context);
-//               
-//        }
-//
-//        // Nope.
-//        logger.info("No opportunistic mines exist.");
-//        return noGoodMineDecisioner.makeDecision(context);
-//    }
-//}

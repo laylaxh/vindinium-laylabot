@@ -40,6 +40,8 @@ public class CombatOutcomeDecisioner implements Decision<AdvancedMurderBot.GameC
         }
 
         // If we have more health than them or they only can take one more hit
+        // LAYLA: changed from if (opponent.getLife() <= 20 || me.getLife >= 30)
+        // Ensures I'm always one step ahead of them 
         if(opponent.getLife() < me.getLife() + 20) {
             logger.info("Bot will most likely win the current battle.");
             return winningDecisioner.makeDecision(context);

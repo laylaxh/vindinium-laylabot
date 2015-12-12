@@ -73,21 +73,6 @@ public class SquatDecisioner implements Decision<AdvancedMurderBot.GameContext, 
         List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 1);
         logger.info("Enemy next to me. Keep squatting at pub.");
         if (!enemies.isEmpty()) return BotMove.STAY;
-//        for (GameState.Hero enemy : enemies) {
-//        	if(enemy.getPos().equals(nearestPub))
-//        }   
-        
-        
-//        GameState.Hero me = context.getGameState().getMe();
-//        Map<GameState.Position, GameState.Hero> heroesByPosition = context.getGameState().getHeroesByPosition();
-//        Map<GameState.Position, Vertex> boardGraph = context.getGameState().getBoardGraph();
-//
-//        for(Vertex neighboringVertex : boardGraph.get(me.getPos()).getAdjacentVertices()) {
-//            // Is there a neighbor in this vertex
-//            GameState.Position neighboringPosition = neighboringVertex.getPosition();
-//            if(heroesByPosition.containsKey(neighboringPosition))
-        
-        
 
         // Nothing to do...squat!
         logger.info("Squatting at pub.");
