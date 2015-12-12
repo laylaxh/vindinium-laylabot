@@ -50,8 +50,8 @@ public class EnRouteLootingDecisioner implements Decision<AdvancedMurderBot.Game
 
 				// Is it safe to take?
 				
-				// LAYLA Looks for enemies within 2 tiles away
-	        	List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 2);
+				// LAYLA Looks for enemies within 3 tiles away
+	        	List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 3);
 
 	        	  boolean myHealthIsGreater = false;
 	              
