@@ -18,6 +18,11 @@ import java.util.Set;
  *
  * On
  */
+
+
+// LAYLA: Flaw is that AdvancedMurderBot will avoid other bots that aren't targets, but it won't walk far enough around 
+// them to avoid a fight.  Rather, it will just walk next to them, provoking a strike. 
+
 public class BotTargetingDecisioner implements Decision<AdvancedMurderBot.GameContext, BotMove> {
 
     private static final Logger logger = LogManager.getLogger(BotTargetingDecisioner.class);
@@ -97,7 +102,7 @@ public class BotTargetingDecisioner implements Decision<AdvancedMurderBot.GameCo
                 }
             }
 
-            // Ok, we got this far...it must not be squatting.  Is it closest?
+            // Ok, we got this far...it must not be squatting.  Is it closest to me?
             if (closestTarget == null) {
                 closestTarget = currentHero;
                 closestTargetDijkstraResult = context.getDijkstraResultMap().get(closestTarget.getPos());

@@ -4,9 +4,11 @@ import com.layla.vindiniumclient.bot.BotMove;
 import com.layla.vindiniumclient.bot.BotUtils;
 import com.layla.vindiniumclient.bot.advanced.Mine;
 import com.layla.vindiniumclient.dto.GameState;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.layla.vindiniumclient.bot.advanced.murderbot.AdvancedMurderBot.DijkstraResult;
@@ -54,8 +56,24 @@ public class UnattendedMineDecisioner implements Decision<AdvancedMurderBot.Game
 
         if(targetMine != null) {
 
+        	// LAYLA lowered how close the enemy can be (it needs to be further away now) Changed 2 to 3
+        	List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 3);
+
+        	  boolean myHealthIsGreater = false;
+              
+              // check if my health is greater than both enemies by at least 20
+              for (GameState.Hero enemy : enemies) {
+                if ((context.getGameState().getMe().getLife() + 20) < enemy.getLife()) {
+                  myHealthIsGreater = false;
+                  break;
+                } else {
+                  myHealthIsGreater = true;
+                }
+              }                
+        	
+        	
             // Is it safe to move?
-            if(BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 2).size() > 0) {
+            if(enemies.size() > 0 && !myHealthIsGreater) {
                 logger.info("Mine found, but another hero is too close.");
                 return noGoodMineDecision.makeDecision(context);
             }

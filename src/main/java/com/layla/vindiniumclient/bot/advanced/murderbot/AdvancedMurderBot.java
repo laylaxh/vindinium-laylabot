@@ -106,7 +106,9 @@ public class AdvancedMurderBot implements AdvancedBot {
         SquatDecisioner squatDecisioner = new SquatDecisioner();
         UnattendedMineDecisioner unattendedMineDecisioner = new UnattendedMineDecisioner(squatDecisioner);
         BotTargetingDecisioner botTargetingDecisioner = new BotTargetingDecisioner(unattendedMineDecisioner);
-        EnRouteLootingDecisioner enRouteLootingDecisioner = new EnRouteLootingDecisioner(unattendedMineDecisioner);
+       
+        // LAYLA: Keep dying en route. Add botTargetingDecisioner to attack. Not be attacked only!
+        EnRouteLootingDecisioner enRouteLootingDecisioner = new EnRouteLootingDecisioner(unattendedMineDecisioner, botTargetingDecisioner);
 
         HealDecisioner healDecisioner = new HealDecisioner();
         CombatOutcomeDecisioner combatOutcomeDecisioner = new CombatOutcomeDecisioner(botTargetingDecisioner,

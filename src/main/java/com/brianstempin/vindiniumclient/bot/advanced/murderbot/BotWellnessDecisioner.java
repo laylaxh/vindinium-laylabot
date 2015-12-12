@@ -44,7 +44,8 @@ public class BotWellnessDecisioner implements Decision<AdvancedMurderBot.GameCon
         for(Vertex currentVertex : myVertex.getAdjacentVertices()) {
             if(context.getGameState().getPubs().containsKey(
                     currentVertex.getPosition())) {
-                if(me.getLife() < 80) {
+            	// LAYLA: Decreased from 80 to 60 to play it safe
+                if(me.getLife() < 60) {
                     logger.info("Bot is next to a pub already and could use health.");
                     return BotUtils.directionTowards(me.getPos(), currentVertex.getPosition());
                 }
@@ -55,7 +56,8 @@ public class BotWellnessDecisioner implements Decision<AdvancedMurderBot.GameCon
         }
 
         // Is the bot well?
-        if(context.getGameState().getMe().getLife() >= 30) {
+        // LAYLA Increased from 30 to 50 to be safer
+        if(context.getGameState().getMe().getLife() >= 50) {
             logger.info("Bot is healthy.");
             return yesDecisioner.makeDecision(context);
         }

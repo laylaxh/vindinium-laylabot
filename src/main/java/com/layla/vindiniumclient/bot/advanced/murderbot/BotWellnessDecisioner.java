@@ -1,9 +1,14 @@
 package com.layla.vindiniumclient.bot.advanced.murderbot;
 
+import java.util.List;
+import java.util.Map;
+
 import com.layla.vindiniumclient.bot.BotMove;
 import com.layla.vindiniumclient.bot.BotUtils;
+import com.layla.vindiniumclient.bot.advanced.Mine;
 import com.layla.vindiniumclient.bot.advanced.Vertex;
 import com.layla.vindiniumclient.dto.GameState;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +49,7 @@ public class BotWellnessDecisioner implements Decision<AdvancedMurderBot.GameCon
         for(Vertex currentVertex : myVertex.getAdjacentVertices()) {
             if(context.getGameState().getPubs().containsKey(
                     currentVertex.getPosition())) {
-                if(me.getLife() < 65) {
+                if(me.getLife() < 60) {    // LAYLA changed from 80 to 60
                     logger.info("Bot is next to a pub already and could use health.");
                     return BotUtils.directionTowards(me.getPos(), currentVertex.getPosition());
                 }
@@ -54,10 +59,21 @@ public class BotWellnessDecisioner implements Decision<AdvancedMurderBot.GameCon
             }
         }
 
-        // Is the bot well?
-        if(context.getGameState().getMe().getLife() >= 30) {
+        
+        // LAYLA: Is the bot well?
+        // If I have more than 25% of the total mines, make bot healthy at 50 instead of 30 (conservative)
+        // However, if I don't have a lot of mines, declare bot healthy at 30
+        int totalMineCount = context.getGameState().getMines().size();
+        int myMineCount =  me.getMineCount();
+        double mineRatio = (myMineCount / totalMineCount);
+   
+        if((mineRatio <= .25) && context.getGameState().getMe().getLife() >= 50) {
             logger.info("Bot is healthy.");
             return yesDecisioner.makeDecision(context);
+        }
+        else if ((mineRatio > .25) && context.getGameState().getMe().getLife() >= 30){
+        	 logger.info("Bot is healthy.");
+             return yesDecisioner.makeDecision(context);
         }
         else {
             logger.info("Bot is damaged.");

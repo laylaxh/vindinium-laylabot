@@ -3,10 +3,13 @@ package com.layla.vindiniumclient.bot.advanced.murderbot;
 import com.layla.vindiniumclient.bot.BotMove;
 import com.layla.vindiniumclient.bot.BotUtils;
 import com.layla.vindiniumclient.bot.advanced.Pub;
+import com.layla.vindiniumclient.bot.advanced.Vertex;
 import com.layla.vindiniumclient.dto.GameState;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,10 +63,31 @@ public class SquatDecisioner implements Decision<AdvancedMurderBot.GameContext, 
         }
 
         // Ok, we must be there.  Do we need health?
-        if(me.getLife() < 50) {
+        // LAYLA: Changed from 50 to 40 
+        if(me.getLife() < 40) {
             logger.info("Getting health while squatting.");
             return BotUtils.directionTowards(me.getPos(), nearestPub.getPosition());
         }
+        
+        // LAYLA: If enemy is adjacent to me, keep squatting
+        List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 1);
+        logger.info("Enemy next to me. Keep squatting at pub.");
+        if (!enemies.isEmpty()) return BotMove.STAY;
+//        for (GameState.Hero enemy : enemies) {
+//        	if(enemy.getPos().equals(nearestPub))
+//        }   
+        
+        
+//        GameState.Hero me = context.getGameState().getMe();
+//        Map<GameState.Position, GameState.Hero> heroesByPosition = context.getGameState().getHeroesByPosition();
+//        Map<GameState.Position, Vertex> boardGraph = context.getGameState().getBoardGraph();
+//
+//        for(Vertex neighboringVertex : boardGraph.get(me.getPos()).getAdjacentVertices()) {
+//            // Is there a neighbor in this vertex
+//            GameState.Position neighboringPosition = neighboringVertex.getPosition();
+//            if(heroesByPosition.containsKey(neighboringPosition))
+        
+        
 
         // Nothing to do...squat!
         logger.info("Squatting at pub.");
