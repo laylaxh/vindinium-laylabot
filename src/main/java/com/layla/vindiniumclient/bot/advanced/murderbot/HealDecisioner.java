@@ -21,17 +21,7 @@ import java.util.Map;
  */
 
 
-//public class HealDecisioner implements Decision<AdvancedMurderBot.GameContext, BotMove> {
-//
-//    private static final Logger logger = LogManager.getLogger(HealDecisioner.class);
-//
-//    @Override
-//    public BotMove makeDecision(AdvancedMurderBot.GameContext context) {
-//        logger.info("Need to heal; running to nearest pub.");
-//
-//        Map<GameState.Position, AdvancedMurderBot.DijkstraResult> dijkstraResultMap = context.getDijkstraResultMap();
-//
-//        // LAYLA: Locate unoccupied pubs (no enemies next to it)
+//        // LAYLA: Locate unoccupied pubs (no enemies next to it) Couldn't get this to work! :(
 //        
 //        Map<GameState.Position, GameState.Hero> heroesByPosition = context.getGameState().getHeroesByPosition();
 //        Map<GameState.Position, Vertex> boardGraph = context.getGameState().getBoardGraph();
@@ -40,40 +30,15 @@ import java.util.Map;
 //        Pub nearestPub = null;
 //        AdvancedMurderBot.DijkstraResult nearestPubDijkstraResult = null;
 //        for(Pub pub : context.getGameState().getPubs().values()) {
-//        	boolean unoccupiedPubs = false;
+//        	List<Pub> unoccupiedPubs = newArrayList<Pub>();
 //        	
 //        	 for(Vertex pubVertex : boardGraph.get(context.getGameState().getPubs()).getAdjacentVertices()) {
 //          	   // Is there a neighbor in this vertex
 //                 GameState.Position neighboringPosition = pubVertex.getPosition();
 //                 if(!heroesByPosition.containsKey(neighboringPosition)){
-//              	   unoccupiedPubs = true;
+//              	   unoccupiedPubs.add(pubVertex);
 //                 }
 //              }
-//        	
-//            AdvancedMurderBot.DijkstraResult dijkstraToPub = dijkstraResultMap.get(pub.getPosition());
-//            if(dijkstraToPub != null) {
-//                if((nearestPub == null || nearestPubDijkstraResult.getDistance() >
-//                    dijkstraToPub.getDistance()) ) {
-//                    nearestPub = pub;
-//                    nearestPubDijkstraResult = dijkstraResultMap.get(pub.getPosition());
-//                }
-//            }
-//        }
-//
-//        if(nearestPub == null)
-//            return BotMove.STAY;
-//
-//        // TODO How do we know that we're not walking too close to a foe?
-//        GameState.Position nextMove = nearestPub.getPosition();
-//        // While it's not right next to you, move towards it
-//        while(nearestPubDijkstraResult.getDistance() > 1) {
-//            nextMove = nearestPubDijkstraResult.getPrevious();
-//            nearestPubDijkstraResult = dijkstraResultMap.get(nextMove);
-//        }
-//
-//        return BotUtils.directionTowards(nearestPubDijkstraResult.getPrevious(), nextMove);
-//    }
-//}
 
 
 public class HealDecisioner implements Decision<AdvancedMurderBot.GameContext, BotMove> {
@@ -85,7 +50,6 @@ public class HealDecisioner implements Decision<AdvancedMurderBot.GameContext, B
 		logger.info("Need to heal; running to nearest pub.");
 
 		Map<GameState.Position, AdvancedMurderBot.DijkstraResult> dijkstraResultMap = context.getDijkstraResultMap();
-
 
 		// Run to the nearest pub
 		Pub nearestPub = null;
@@ -106,30 +70,31 @@ public class HealDecisioner implements Decision<AdvancedMurderBot.GameContext, B
 
 		GameState.Position nextMove = nearestPub.getPosition();
 		while(nearestPubDijkstraResult.getDistance() > 1){
-//				&& (BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 2).size() > 0)) {
+		//			&& (BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 2).size() > 0)) {
 			nextMove = nearestPubDijkstraResult.getPrevious();
 			nearestPubDijkstraResult = dijkstraResultMap.get(nextMove);
 		}
-		
-//		Map<GameState.Position, GameState.Hero> heroesByPosition = context.getGameState().getHeroesByPosition();
-//		while(nearestPubDijkstraResult.getDistance() > 1) {
-//			// LAYLA: Check if enemy is too close (checks radius 2 around me)
-//			if(!(BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 2).size() > 0)){
-//				// Goes to next nearest pub
-//				return BotUtils.directionTowards(nearestPubDijkstraResult.getPrevious(), nextMove);
-//			}
-//			// LAYLA : If there is an enemy that's adjacent to the pub, steer clear
-//			if (!heroesByPosition.containsKey(nearestPub)){
-//				// Goes to next nearest pub
-//				return BotUtils.directionTowards(nearestPubDijkstraResult.getPrevious(), nextMove);
-//		}
-//			else{
-//				nextMove = nearestPubDijkstraResult.getPrevious();
-//				nearestPubDijkstraResult = dijkstraResultMap.get(nextMove);
-//			}
-//		}
-								
-						
+
+		//		Map<GameState.Position, GameState.Hero> heroesByPosition = context.getGameState().getHeroesByPosition();
+		//		while(nearestPubDijkstraResult.getDistance() > 1) {
+		//
+		//			// LAYLA: Check if enemy is too close (checks radius 2 around me) Couldn't get this to work!! :(
+		//			if(!(BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 2).size() > 0)){
+		//				// Goes to next nearest pub
+		//				return BotUtils.directionTowards(nearestPubDijkstraResult.getPrevious(), nextMove);
+		//			}
+		//			// LAYLA : If there is an enemy that's adjacent to the pub, steer clear
+		//			if (!heroesByPosition.containsKey(nearestPub)){
+		//				// Goes to next nearest pub
+		//				return BotUtils.directionTowards(nearestPubDijkstraResult.getPrevious(), nextMove);
+		//		}
+		//			else{
+		//				nextMove = nearestPubDijkstraResult.getPrevious();
+		//				nearestPubDijkstraResult = dijkstraResultMap.get(nextMove);
+		//			}
+		//		}
+
+
 		// Goes to next nearest pub
 		return BotUtils.directionTowards(nearestPubDijkstraResult.getPrevious(), nextMove);
 	}

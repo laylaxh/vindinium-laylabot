@@ -28,8 +28,9 @@ public class EnRouteLootingDecisioner implements Decision<AdvancedMurderBot.Game
 	private final static Logger logger = LogManager.getLogger(EnRouteLootingDecisioner.class);
 
 	private final Decision<AdvancedMurderBot.GameContext, BotMove> noGoodMineDecisioner;
-    private final Decision<AdvancedMurderBot.GameContext, BotMove> attackDecisioner;
 
+	// LAYLA: The attackDecisioner will attack a bot standing next to a pub if it's weak enough
+	private final Decision<AdvancedMurderBot.GameContext, BotMove> attackDecisioner;
 
 	public EnRouteLootingDecisioner(Decision<AdvancedMurderBot.GameContext, BotMove> noGoodMineDecisioner, 
 			Decision<AdvancedMurderBot.GameContext, BotMove> attackDecisioner) {
@@ -49,28 +50,26 @@ public class EnRouteLootingDecisioner implements Decision<AdvancedMurderBot.Game
 					|| mine.getOwner().getId() != context.getGameState().getMe().getId())) {
 
 				// Is it safe to take?
-				
-				// LAYLA Looks for enemies within 3 tiles away
-	        	List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 3);
 
-	        	  boolean myHealthIsGreater = false;
-	              
-	              // Check if my health is greater than both enemies by at least 40
-	              for (GameState.Hero enemy : enemies) {
-	                if ((context.getGameState().getMe().getLife() + 40) < enemy.getLife()) {
-	                  myHealthIsGreater = false;
-	                  break;
-	                } else {
-	                  myHealthIsGreater = true;
-	                }
-	              }                
-	              
-						if(myHealthIsGreater && BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 1).size() > 0) {
-							logger.info("Mine found, another hero is too close, but my health is higher");
-							return attackDecisioner.makeDecision(context);
-						}
-						logger.info("Taking a mine that we happen to already be walking by.");
-						return BotUtils.directionTowards(myPosition, mine.getPosition());
+				// LAYLA: Looks for enemies within 3 tiles away
+				List<GameState.Hero> enemies = BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 3);
+
+				boolean myHealthIsGreater = false;
+
+				// Check if my health is greater than both enemies by at least 40
+				for (GameState.Hero enemy : enemies) {
+					if ((context.getGameState().getMe().getLife() + 40) < enemy.getLife()) {
+						myHealthIsGreater = false;
+						break;
+					} else myHealthIsGreater = true;
+				}                
+
+				if(myHealthIsGreater && BotUtils.getHeroesAround(context.getGameState(), context.getDijkstraResultMap(), 1).size() > 0) {
+					logger.info("Mine found, another hero is too close, but my health is higher");
+					return attackDecisioner.makeDecision(context);
+				}
+				logger.info("Taking a mine that we happen to already be walking by.");
+				return BotUtils.directionTowards(myPosition, mine.getPosition());
 			}
 		}
 
