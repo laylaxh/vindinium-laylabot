@@ -13,6 +13,8 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
+ * LAYLA: Made modifications to original AdvancedMurderBot to improve performance.
+ * 
  * An improvement upon com.brianstempin.vindiniumClient.bot.simple.MurderBot
  *
  * This class uses a built-in static method to perform the path search via Dijkstra and uses a simple version of
